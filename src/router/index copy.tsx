@@ -1,7 +1,6 @@
 //旧的路由写法：组件形式写法
 
 import App from "@/App";
-import About from "@/views/About";
 import Home from "@/views/Home";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 //两种路由模式组件：BrowserRouter（History模式）、HashRouter（Hash模式）

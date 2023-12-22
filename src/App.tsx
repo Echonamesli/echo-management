@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Comp1 from "@/components/Comp1"
 //antd5的样式支持自动按需引入
 import { Button } from 'antd';
 import { LogoutOutlined } from "@ant-design/icons";

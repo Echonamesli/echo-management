@@ -1,7 +1,7 @@
-function View(){
+const View = () => {
     return(
         <div className='about'>
-            <p>我是about</p>
+            <p>我是page303</p>
         </div>
     )
 }
