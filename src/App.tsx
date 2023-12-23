@@ -1,4 +1,3 @@
-import { useState } from 'react'
 //antd5的样式支持自动按需引入
 import { Button } from 'antd';
 import { LogoutOutlined } from "@ant-design/icons";
@@ -7,7 +6,6 @@ import { Link, Outlet, useRoutes } from 'react-router-dom';
 import router from './router';
 
 function App() {
-  const [count, setCount] = useState(0)
   const outlet = useRoutes(router)
   return (
     <div>
