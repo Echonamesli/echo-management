@@ -13,7 +13,7 @@ interface LoginAPIReq {
     username: string;
     password: string;
     code: string;
-    uuid: string;
+    uuid: string;   // 验证码会伴随着一个uuid（服务器给的）
 }
 // 登录的响应类型约束
 interface LoginAPIRes {
