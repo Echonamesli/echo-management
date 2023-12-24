@@ -26,6 +26,10 @@
       ]
     }
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  //定义哪些文件夹下面的文件被编译
+  "include": ["src", "./**/*.ts", "mock/**/*.ts"],
+  //这是 TypeScript 3.0 新增的 “项目引用（Project References）” 功能
+  //tscnofig.json 是用于普通文件（运行在浏览器环境中）的TS配置文件
+  //tscnofig.node.json 是专门用于 vite.config.ts 这一文件（运行在node环境中）的 TypeScript 配置文件。
+  "references": [{ "path": "./tsconfig.node.json" }]  
 }

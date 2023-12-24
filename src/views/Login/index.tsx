@@ -5,91 +5,108 @@ import styles from "./login.module.scss"
 
 import initLoginBg from "./init.ts"
 
-import { ChangeEvent, useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Button, Input, Space, message } from "antd"
 
 import "./login.less"
 
-import { CaptchaAPI, LoginAPI } from "@/request/api"
-
 import { useNavigate } from "react-router-dom"
+import { fetchGetCode, fetchLogin } from "@/service/api/auth.ts"
+import { LoginRequest } from "@/types/api.js"
+import RandomCode from "./identifyCodes.ts"
+import { setToken } from "@/utils/auth"
 
 const login = () => {
     const navigateTo = useNavigate()
+
+    const loginInfo: LoginRequest = {
+        name: "",
+        password: "",
+        code: "",
+        originCode: "",
+    };
 
     //加载完这个组件之后,加载背景
     useEffect(() => {
         initLoginBg();
         //同时我们希望窗口大小改变之后也能初始化
         window.onresize = function () { initLoginBg() }
-        //获取验证码图片
-        getCaptchaImg()
+        //获取并绘制验证码图片
+        const fetchCode = async () => {
+            const { data } = await fetchGetCode()
+            if (data) {
+                //画验证码
+                RandomCode(data.code)
+                loginInfo.originCode = data.code
+            }
+        }
+        fetchCode()
     }, [])
-    const [usernameVal, setusernameVal] = useState("")
-    const [passwordVal, setPasswordVal] = useState("")
-    const [captchaVal, setCaptchaVal] = useState("")
-    //验证码图片变量
-    const [captchaImg, setCaptchaImg] = useState("")
 
-    //<HTMLInputElement> 是对泛型 ChangeEvent 进行具体化，告诉 TypeScript 这个事件对象是针对 <input> 元素的
-    const usernameChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setusernameVal(e.target.value)
+    const userChange = (value: string, name: string) => {
+        loginInfo[name] = value
     }
-    const passwordChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setPasswordVal(e.target.value)
+
+    //点击验证码图片会重新绘制验证码画布
+    const onRefresh = async () => {
+        const { data } = await fetchGetCode()
+        if (data) {
+            RandomCode(data.code)
+            loginInfo.originCode = data.code
+        }
     }
-    const captchaChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setCaptchaVal(e.target.value)
-    }
+
     const goToLogin = async () => {
-        //console.log(usernameVal, passwordVal, captchaVal)
         //验证是否有空值
-        if (!usernameVal.trim() || !passwordVal.trim() || !captchaVal.trim()) {
-            message.warning("请输入完整信息！")
-            return
-        }
-        let loginAPIRes = await LoginAPI({
-            username: usernameVal,
-            password: passwordVal,
-            code: captchaVal,
-            uuid: localStorage.getItem("uuid") as string
+        let empty: string = ""
+        Object.keys(loginInfo).reverse().forEach((key) => {
+            if (!loginInfo[key]) {
+                empty = getWarning(key)
+            }
         })
-        //console.log(loginAPIRes);
-        if(loginAPIRes.code === 200){
-            message.success("登陆成功")
-            //保存token
-            localStorage.setItem("echo-react-management-token", loginAPIRes.token)
-            //跳转到page1
-            navigateTo("/page1")
-            //删除本地保存中的uuid（这个uuid是陪伴验证码的好朋友）
-            localStorage.removeItem("uuid")
+        if (empty) {
+            return message.warning(empty)
         }
-    }
-    const getCaptchaImg = async () => {
-        //let captchaAPIRes:CaptchaAPIRes = await CaptchaAPI()
-        let captchaAPIRes = await CaptchaAPI()
-        //console.log(CaptchaAPIRes);
-        setCaptchaImg("data:image/gif;base64," + captchaAPIRes.img)
-        //本地保存uuid，给登陆的时候用
-        localStorage.setItem("uuid", captchaAPIRes.uuid)
+        const { data, error } = await fetchLogin(loginInfo)
+        if (error) {
+            onRefresh()
+        } else {
+            setToken(data.token)
+            //取消之前设置的 onresize 事件处理函数
+            window.onresize = null
+            navigateTo("/")
+        }
+        // if (loginAPIRes.code === 200) {
+        //     message.success("登陆成功")
+        //     //保存token
+        //     localStorage.setItem("echo-react-management-token", loginAPIRes.token)
+        //     //跳转到page1
+        //     navigateTo("/page1")
+        //     //删除本地保存中的uuid（这个uuid是陪伴验证码的好朋友）
+        //     localStorage.removeItem("uuid")
+        // }
     }
     return (
         <div className={styles.loginPage}>
             {/* 存放背景 */}
-            <canvas id="canvas" style={{ display: "block" }}></canvas>
+            <canvas id="bg-canvas" style={{ display: "block" }}></canvas>
             {/* 注意 第二个类名前要有空格 */}
             <div className={styles.loginBox + " myLoginBox"}>
                 <div className={styles.title}>
                     <h1>李佳晓&nbsp;&nbsp;通用后台管理系统</h1>
                     <p>happy everyday</p>
                     <Space direction="vertical" size="large" style={{ display: 'flex' }}>
-                        <Input placeholder="用户名" onChange={usernameChange} />
-                        <Input.Password placeholder="密码" onChange={passwordChange} />
-                        <div className="captchaBox">
-                            <Input placeholder="验证码" onChange={captchaChange}></Input>
-                            <div className="captchaImg" onClick={getCaptchaImg}>
-                                <img height="38" src={captchaImg} alt="" />
-                            </div>
+                        <Input placeholder="用户名" onChange={(e) => userChange(e.target.value, "name")} />
+                        <Input.Password placeholder="密码" onChange={(e) => userChange(e.target.value, "password")} />
+                        <div className={styles.captchaBox}>
+                            <Input placeholder="验证码" onChange={(e) => userChange(e.target.value, "code")}></Input>
+                            <canvas
+                                id="code-canvas"
+                                width="100"
+                                height="32"
+                                onClick={onRefresh}
+                                style={{ cursor: "pointer" }}
+                            ></canvas>
                         </div>
                         <Button type="primary" className="loginBtn" block onClick={goToLogin}>
                             登录
@@ -101,4 +118,19 @@ const login = () => {
     )
 }
 
+function getWarning(type: string) {
+    switch (type) {
+        case "name":
+            return "请输入名字"
+            break
+        case "password":
+            return "请输入密码"
+            break
+        case "code":
+            return "请输入验证码"
+            break
+        default:
+            return ""
+    }
+}
 export default login

@@ -5,6 +5,7 @@ import { LogoutOutlined } from "@ant-design/icons";
 import { Link, Outlet, useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import router from './router';
 import { useEffect } from 'react';
+import { getToken } from './utils/auth';
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
       // 加载完组件之后执行这里的代码
       navigateTo("/login");
       message.warning("您还没有登录，请登录后再访问！");
-    }, [])
+    }, [navigateTo])
     return <div></div>
   }
   // 去往首页的组件
@@ -27,7 +28,7 @@ function App() {
       // 加载完组件之后执行这里的代码
       navigateTo("/page1");
       message.warning("您已经登录过了！");
-    }, [])
+    }, [navigateTo])
     return <div></div>
   }
 
@@ -41,7 +42,7 @@ function App() {
     2、如果访问的不是登录页面，并且没有token， 跳转到登录页
     3、其余的都可以正常放行
   */
-    let token = localStorage.getItem("echo-react-management-token")
+    let token = getToken()
     if (location.pathname === "/login" && token) {
       //这里不能直接用 useNavigate 来实现跳转 ，因为需要BeforeRouterEnter是一个正常的JSX组件
       return <ToPage1 />
@@ -49,7 +50,8 @@ function App() {
     if (location.pathname !== "/login" && !token) {
       return <ToLogin />
     }
-
+    //其余情况都正常放行
+    return outlet
   }
   return (
     <div>

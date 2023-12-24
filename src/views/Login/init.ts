@@ -3,7 +3,7 @@ export default function initLoginBg() {
     var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
     // var windowWidth = window.clientWidth;
     // var windowHeight = window.clientHeight;
-    var canvas = document.getElementById('canvas') as HTMLCanvasElement,
+    var canvas = document.getElementById('bg-canvas') as HTMLCanvasElement,
         ctx = canvas.getContext('2d') as CanvasRenderingContext2D,
         w = canvas.width = windowWidth,
         h = canvas.height = windowHeight,

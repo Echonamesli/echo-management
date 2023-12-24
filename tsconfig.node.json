@@ -6,5 +6,7 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
+  //include里头的文件意味着仅在Node环境中运行
   "include": ["vite.config.ts"]
+  //"include": []
 }
