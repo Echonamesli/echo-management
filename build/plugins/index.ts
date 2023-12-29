@@ -3,4 +3,4 @@ import mock from "./mock";
 
 const plugins = [mock, react];
 
-export default plugins;
+export default plugins;  //默认导出,只能导出一个成

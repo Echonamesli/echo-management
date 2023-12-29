@@ -1,5 +1,6 @@
 import type { MockMethod } from "vite-plugin-mock"
-import { LoginRequest, BackendServiceResult } from "../src/types/api"
+import { LoginRequest } from "@/types/auth"
+import type { BackendServiceResult } from "@/types/service";
 import { randomStr } from "../src/utils/common/random"
 
 export default [
@@ -7,7 +8,8 @@ export default [
         url: "/api/login",
         method: "post",
         response: (data: LoginRequest): BackendServiceResult => {
-            if (data.body.code !== data.body.originCode) {
+            const { code, originCode} = data.body
+            if (code !== originCode) {
                 return {
                     code: 201,
                     data: null,

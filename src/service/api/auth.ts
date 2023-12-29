@@ -1,4 +1,4 @@
-import { LoginRequest } from "@/types/api";
+import { LoginRequest } from "../../types/auth";
 import { mockRequest } from "../request";
 
 export function fetchLogin(params: LoginRequest){

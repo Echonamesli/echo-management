@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 // mport react from '@vitejs/plugin-react'
-import { plugins } from "./build"; //引入mock插件和vite支持react的插件，供全局使用
+import { plugins } from "./build";  //引入mock插件和vite支持react的插件，供全局使用
 import * as path from 'path'
 
 // https://vitejs.dev/config/

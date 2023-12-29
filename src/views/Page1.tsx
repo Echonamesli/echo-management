@@ -29,11 +29,8 @@ const View = () => {
             <p>我是page1</p>
             <p>{num}</p>
             <button onClick={changeNum}>num加1</button>
-            <br />
             <button onClick={changeNum2}>num加10</button>
-            <br />
             <button onClick={asyncChangeNum}>num异步按钮</button>
-            <br />
             <br />
             <button onClick={changeArr}>往数组push元素</button>
             <p>{myarr}</p>

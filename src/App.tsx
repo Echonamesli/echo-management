@@ -1,8 +1,7 @@
 //antd5的样式支持自动按需引入
 import { Button, message } from 'antd';
-import { LogoutOutlined } from "@ant-design/icons";
 
-import { Link, Outlet, useLocation, useNavigate, useRoutes } from 'react-router-dom';
+import { useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import router from './router';
 import { useEffect } from 'react';
 import { getToken } from './utils/auth';
@@ -32,7 +31,7 @@ function App() {
     return <div></div>
   }
 
-  // 手写封装路由守卫
+  // 手写封装路由守卫组件
   function BeforeRouterEnter() {
     const outlet = useRoutes(router)
     const location = useLocation()
@@ -50,18 +49,11 @@ function App() {
     if (location.pathname !== "/login" && !token) {
       return <ToLogin />
     }
-    //其余情况都正常放行
+    //其余路由都正常放行，想去哪就去哪
     return outlet
   }
   return (
     <div>
-      {/* 顶级组件
-      <Comp1></Comp1>
-      <Button type="primary">Primary Button</Button>
-      <br />
-      <LogoutOutlined style={{fontSize:'40px'}}/> */}
-
-
       {/* 占位符组件，类似于窗口，用来展示组件 */}
       {/* 组件形式的路由写法 */}
       {/* <Outlet></Outlet> */}

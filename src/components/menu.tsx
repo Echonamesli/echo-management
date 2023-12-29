@@ -8,7 +8,6 @@ import {
 } from '@ant-design/icons';
 import { Menu, type MenuProps } from 'antd';
 import { useEffect, useState } from "react";
-import { log } from "console";
 
 type MenuItem = Required<MenuProps>['items'][number];
 

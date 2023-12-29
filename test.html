@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Throttle Function Test</title>
+</head>
+
+<body>
+
+  <button id="throttleButton">Click Me</button>
+
+  <script>
+    // 时间戳版本：第一次会执行
+    function throttle(func, delay) {
+      let lastTime = 0;
+      return function () {
+        const now = Date.now();
+        console.log(now)
+        if (now - lastTime >= delay) {
+          func.apply(this, arguments);
+          lastTime = now;
+        }
+      };
+    }
+    //定时器版本：时间到了才执行
+    function throttle2(fn, interval) {
+      let timer = null
+      return function () {
+        if (!timer) {
+          timer = setTimeout(() => {
+            fn.apply(this, arguments)
+            timer = null
+          }, interval)   //每次只有时间到了，timer就被设置为null  就走到这儿来了 就会执行 
+        }
+      }
+    }
+    let throttle3 = function (callback, delay) {
+      let flag = true
+      let timer = null
+      return function () {
+        if (!timer) {
+          timer = setTimeout(() => {
+            callback()
+            flag = false
+            timer = null
+          }, flag ? 0 : delay)
+        }
+      }
+    }
+
+    // 测试用的函数
+    function handleButtonClick() {
+      console.log("11111");
+      console.log(Date.now())
+    }
+
+    // 使用节流函数包装测试函数
+    const throttledButtonClick = throttle2(handleButtonClick, 5000);
+
+    // 给按钮添加点击事件处理函数
+    document.getElementById('throttleButton').addEventListener('click', throttledButtonClick);
+  </script>
+
+</body>
+
+</html>

@@ -15,7 +15,7 @@ export default function RandomCode(code: string) {
     };
     //随机颜色
     const randomColor = (min: number, max: number) => {
-        return `rgba(${randomNum(min, max)}, ${randomNum(min, max)}, ${randomNum(min, max)}})`
+        return `rgb(${randomNum(min, max)}, ${randomNum(min, max)}, ${randomNum(min, max)})`
     }
     //画图
     const draw = () => {
@@ -30,7 +30,11 @@ export default function RandomCode(code: string) {
             randoms.backgroundColorMax
         );
         ctx.fillRect(0, 0, width, height)
-
+        //开始绘制每一个数字
+        for(let i = 0; i < code.length; i++){
+            drawText(ctx, code[i], i, width, height)
+        }
+    }
         //绘制每一个数字的函数
         const drawText = (
             ctx: CanvasRenderingContext2D,
@@ -53,10 +57,5 @@ export default function RandomCode(code: string) {
             ctx.rotate((-deg * Math.PI) / 180);
             ctx.translate(-x, -y);
         }
-        //开始绘制每一个数字
-        for(let i = 0; i < code.length; i++){
-            drawText(ctx, code[i], i, width, height)
-        }
         draw()
     }
-}

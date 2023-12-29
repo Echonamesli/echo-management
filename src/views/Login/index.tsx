@@ -12,7 +12,7 @@ import "./login.less"
 
 import { useNavigate } from "react-router-dom"
 import { fetchGetCode, fetchLogin } from "@/service/api/auth.ts"
-import { LoginRequest } from "@/types/api.js"
+import { LoginRequest } from "@/types/auth"
 import RandomCode from "./identifyCodes.ts"
 import { setToken } from "@/utils/auth"
 
@@ -76,15 +76,6 @@ const login = () => {
             window.onresize = null
             navigateTo("/")
         }
-        // if (loginAPIRes.code === 200) {
-        //     message.success("登陆成功")
-        //     //保存token
-        //     localStorage.setItem("echo-react-management-token", loginAPIRes.token)
-        //     //跳转到page1
-        //     navigateTo("/page1")
-        //     //删除本地保存中的uuid（这个uuid是陪伴验证码的好朋友）
-        //     localStorage.removeItem("uuid")
-        // }
     }
     return (
         <div className={styles.loginPage}>

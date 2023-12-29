@@ -6,7 +6,15 @@
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true
   },
-  //include里头的文件意味着仅在Node环境中运行
-  "include": ["vite.config.ts"]
+  /* 它说明 tscnofig.node.json 是专门用于 vite.config.ts 这一文件的 TypeScript 配置文件,
+     那为什么 vite.config.ts 需要一份单独的配置文件呢？我的理解是因为运行环境的不同。
+     项目中的普通代码是运行在浏览器环境中的，因此 TypeScript 需要为这些代码提供 DOM 等浏览器
+     接口的类型支持。而 vite.config.ts 是运行在 Node 环境中的，它不应访问浏览器接口，而相应地它
+     需要各种 Node 接口的类型支持，因此两份代码理应使用不同的配置文件。
+     综上：
+     这句话说明 tscnofig.node.json 是专门为了 vite.config.ts服务的 
+     记得把vite.config.ts用到的build也加进去，这样才找得到
+     */
+  "include": ["vite.config.ts","./build"] 
   //"include": []
 }

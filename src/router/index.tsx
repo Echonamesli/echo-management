@@ -2,8 +2,9 @@
 
 import React from "react"
 import { lazy } from "react"
+import { Navigate } from "react-router-dom"
+import Index from "@/views/index";
 
-const Home = lazy(()=>import("../views/Home"))
 const Page1 = lazy(()=>import("../views/Page1"))
 const Page2 = lazy(()=>import("../views/Page2"))
 const Page301 = lazy(()=>import("../views/Page301"))
@@ -11,7 +12,6 @@ const Page302 = lazy(()=>import("../views/Page302"))
 const Page303 = lazy(()=>import("../views/Page303"))
 const Login = lazy(()=>import("../views/Login"))
 
-import { Navigate } from "react-router-dom"
 
 //懒加载模式：组件外需要套一层Loading的提示加载组件
 const withLoadingComponent = (comp:JSX.Element) => (
@@ -29,8 +29,8 @@ const routes = [
     },
     {
         path:"/",
-        // 这里决定了为什么home是大boss
-        element: <Home/>,
+        // 这里决定了为什么Index是大boss
+        element: <Index/>,
         children: [
             {
                 path: "/page1",
